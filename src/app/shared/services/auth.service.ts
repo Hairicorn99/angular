@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants/key.const';
 import { LoginRequestDto } from '../models/login-request.dto';
 import { LoginResponseDto } from '../models/login-response.dto';
 import { HttpClient } from '@angular/common/http';
@@ -26,5 +27,14 @@ export class AuthService {
       data,
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
+  }
+
+  public isAuthenticated(): boolean{
+    return localStorage.getItem(ACCESS_TOKEN) != null;
+  }
+
+  public logout(){
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(REFRESH_TOKEN);
   }
 }
