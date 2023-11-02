@@ -1,5 +1,5 @@
-import { AuthService } from '@abp/ng.core';
 import { PagedResultDto } from '@abp/ng.core';
+import { ProductCategoriesService, ProductCategoryDto, ProductCategoryInListDto } from '@proxy/product-categories';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductInListDto, ProductsService } from '@proxy/products';
 import { Subject, takeUntil } from 'rxjs';
@@ -19,8 +19,14 @@ export class ProductComponent implements OnInit, OnDestroy {
     public maxResultCount: number = 10;
     public totalCount: number;
 
+    //Filter
+    productCategories: any[] = [];
+    keyword: string = '';
+    categoryId: string = '';
+  
 
-  constructor(private productService: ProductsService) {}
+
+  constructor(private productService: ProductsService, private productCategoriesService:  ProductCategoriesService) {}
   ngOnDestroy(): void {
     this.ngUnsubscrible.next();
     this.ngUnsubscrible.complete();
@@ -28,11 +34,14 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
       this.loadData();
+      this.loadProductCategories();
   }
   loadData() {
+    this.toggleBlockUI(true);
     this.productService
       .getListFilter({
-        keyword: '',
+        keyword: this.keyword,
+        categoryId: this.categoryId,
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
       })
@@ -41,13 +50,41 @@ export class ProductComponent implements OnInit, OnDestroy {
         next: (response: PagedResultDto<ProductInListDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
+          this.toggleBlockUI(false);
         },
-        error: () => {},
+        error: () => {
+          this.toggleBlockUI(false);
+        },
       });
-  }
+      
+    }
+    loadProductCategories(){
+      this.productCategoriesService.getListAll()
+      .subscribe((response: ProductCategoryInListDto[])=>{
+        response.forEach(element=>{
+          this.productCategories.push({
+            value: element.id,
+            name: element.name
+          })
+        });
+      });
+    }
+  
+
+ 
   pageChanged(event: any): void {
     this.skipCount = (event.page -1) * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
+  }
+
+  private toggleBlockUI(enabled: boolean){
+    if(enabled == true){
+      this.blockedPanel = true;
+    }else{
+      setTimeout(()=>{
+        this.blockedPanel = false;
+      },1000);
+    }
   }
 }
