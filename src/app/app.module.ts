@@ -18,6 +18,10 @@ import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { AbpOAuthModule } from '@abp/ng.oauth';
 import { AccountLayoutModule } from '@abp/ng.theme.lepton-x/account';
 import { AppLayoutModule } from './layout/app.layout.module';
+import { MessageService } from 'primeng/api';
+import { NotificationService } from './shared/services/notification.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { UtilityService } from './shared/services/utility.service';
 
 @NgModule({
   imports: [
@@ -43,7 +47,7 @@ import { AppLayoutModule } from './layout/app.layout.module';
               AccountLayoutModule.forRoot(),
   ],
   declarations: [AppComponent],
-  providers: [APP_ROUTE_PROVIDER],
+  providers: [APP_ROUTE_PROVIDER, DialogService, MessageService, NotificationService, UtilityService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
