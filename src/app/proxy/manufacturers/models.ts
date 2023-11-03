@@ -1,35 +1,32 @@
 import type { EntityDto } from '@abp/ng.core';
 
-export interface CreateUpdateProductCategoryDto {
+export interface CreateUpdateManufacturerDto {
   name?: string;
   code?: string;
   slug?: string;
-  sortOrder: number;
   coverPicture?: string;
   visibility: boolean;
   isActive: boolean;
-  parentId?: string;
-  seoMetaDescription?: string;
+  country?: string;
 }
 
-export interface ProductCategoryDto {
+export interface ManufacturerDto {
   name?: string;
   code?: string;
   slug?: string;
-  sortOrder: number;
   coverPicture?: string;
   visibility: boolean;
   isActive: boolean;
-  parentId?: string;
-  seoMetaDescription?: string;
+  country?: string;
   id?: string;
 }
 
-export interface ProductCategoryInListDto extends EntityDto<string> {
+export interface ManufacturerInListDto extends EntityDto<string> {
   name?: string;
   code?: string;
-  sortOrder: number;
+  slug?: string;
   coverPicture?: string;
   visibility: boolean;
   isActive: boolean;
+  country?: string;
 }
